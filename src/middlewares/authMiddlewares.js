@@ -10,6 +10,6 @@ module.exports = (req, res, next) => {
     req.user_id = id;
     return next();
   } catch (err) {
-    return next(err);
+    res.status(401).send({ ok: false, data: 'token invalid' });
   }
 }

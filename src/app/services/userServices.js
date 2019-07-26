@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, UserType } = require('../models');
 
 async function createUser({ nome, matricula }) {
   try {
@@ -39,8 +39,54 @@ async function getUserByMatricula(matricula) {
   }
 }
 
+
+async function updateUser({ matricula, nome }) {
+  try {
+    return await User.update({ matricula, nome });
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function createUserType({ tipo }) {
+  try {
+    return await UserType.create({ tipo });
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function getUserType(id) {
+  try {
+    return await UserType.findByPk(id);
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function getAllUserType() {
+  try {
+    return await UserType.findAll();
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function updateUserType({ id, tipo }) {
+  try {
+    return UserType.update({ tipo });
+  } catch (e) {
+    throw e;
+  }
+}
+
 module.exports = {
   createUser,
   getUserById,
   getUserByMatricula,
+  updateUser,
+  createUserType,
+  getUserType,
+  getAllUserType,
+  updateUserType
 };
