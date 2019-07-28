@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "./node_modules/.bin/eslint --init"
   },
   "keywords": [
     "pauta",
@@ -24,5 +25,10 @@
     "mysql2": "^1.6.5",
     "sequelize": "^5.10.1",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }

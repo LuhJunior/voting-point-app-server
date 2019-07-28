@@ -1,11 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-
-  const Situacao = sequelize.define('Situacao', {
+  const Situacao = sequelize.define('situacao', {
     descricao: DataTypes.STRING,
   });
 
   Situacao.associate = (models) => {
-    models.Pontos.belongsTo(models.Situacao);
+    models.Ponto.belongsTo(models.Situacao);
   };
 
   return Situacao;

@@ -5,7 +5,7 @@ const {
   findAllUserType,
   alterUserType,
   alterUserTypeById,
-} = require('../app/controllers/userController');
+} = require('../app/controllers/userTypeController');
 
 Router.post('/', addUserType);
 

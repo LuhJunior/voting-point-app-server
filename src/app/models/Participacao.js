@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-
-  const Participacao = sequelize.define('Participacao', {
+  const Participacao = sequelize.define('participacao', {
   });
 
   return Participacao;

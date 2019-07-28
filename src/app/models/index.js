@@ -7,7 +7,7 @@ const {
 } = require('../../config');
 
 const sequelize = new Sequelize(database, user, password, {
-  host: host,
+  host,
   dialect: 'mysql',
 });
 
@@ -17,19 +17,19 @@ const models = {
   VotoType: sequelize.import('./VotoType'),
   Votacao: sequelize.import('./Votacao'),
   Situacao: sequelize.import('./Situacao'),
-  Pontos: sequelize.import('./Pontos'),
+  Ponto: sequelize.import('./Ponto'),
   ReuniaoType: sequelize.import('./ReuniaoType'),
   Reuniao: sequelize.import('./Reuniao'),
   Participacao: sequelize.import('./Participacao'),
-}
+};
 
-Object.keys(models).forEach(modelName => {
+Object.keys(models).forEach((modelName) => {
   if (models[modelName].associate) {
     models[modelName].associate(models);
   }
 });
 
-/* Object.keys(models).forEach(name => {
+/* Object.keys(models).forEach((name) => {
   models[name].sync({ alter: true });
 }); */
 

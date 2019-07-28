@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-
-  const VotoType = sequelize.define('VotoType', {
+  const VotoType = sequelize.define('voto_type', {
     tipo: DataTypes.STRING,
   });
 

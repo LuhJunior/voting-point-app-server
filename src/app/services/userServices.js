@@ -1,8 +1,8 @@
-const { User, UserType } = require('../models');
+const { User } = require('../models');
 
-async function createUser({ nome, matricula }) {
+async function createUser({ nome, matricula, user_type_id: uTypeId }) {
   try {
-    const data = await User.create({ nome, matricula });
+    const data = await User.create({ nome, matricula, user_type_id: uTypeId });
     console.log(data);
     return data;
   } catch (err) {
@@ -24,7 +24,7 @@ async function getUserByMatricula(matricula) {
   try {
     const data = await User.findOne({
       where: {
-        matricula
+        matricula,
       },
       attributes: [
         'id',
@@ -40,41 +40,9 @@ async function getUserByMatricula(matricula) {
 }
 
 
-async function updateUser({ matricula, nome }) {
+async function updateUser({ id, matricula, nome }) {
   try {
-    return await User.update({ matricula, nome });
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function createUserType({ tipo }) {
-  try {
-    return await UserType.create({ tipo });
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function getUserType(id) {
-  try {
-    return await UserType.findByPk(id);
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function getAllUserType() {
-  try {
-    return await UserType.findAll();
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function updateUserType({ id, tipo }) {
-  try {
-    return UserType.update({ tipo });
+    return await User.update({ matricula, nome }, { where: { id } });
   } catch (e) {
     throw e;
   }
@@ -85,8 +53,4 @@ module.exports = {
   getUserById,
   getUserByMatricula,
   updateUser,
-  createUserType,
-  getUserType,
-  getAllUserType,
-  updateUserType
 };

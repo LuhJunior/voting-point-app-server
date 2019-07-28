@@ -3,22 +3,18 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const auth = require('./middlewares/authMiddlewares');
-const { logErrors, errorHandler, notFound } = require('./middlewares/errorMiddlewares');
+const useRoutes = require('./routes');
+const { useMiddlewares } = require('./middlewares');
 
-const userRoutes = require('./routes/userRoutes');
-const userTypeRoutes = require('./routes/userTypeRoutes');
+const App = () => {
+  const app = express();
+  app.use(bodyParser.json());
+  app.use(cors());
 
-const app = express();
+  useRoutes(app);
+  useMiddlewares(app);
 
-app.use(bodyParser.json());
-app.use(cors());
+  return app;
+};
 
-app.use('/users', userRoutes);
-app.use('/user_type', auth, userTypeRoutes);
-
-app.use(logErrors);
-app.use(errorHandler);
-app.use(notFound);
-
-module.exports = app;
+module.exports = App();

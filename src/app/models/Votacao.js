@@ -1,13 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-
-  const Votacao = sequelize.define('Votacao', {
+  const Votacao = sequelize.define('votacao', {
     situacao: DataTypes.STRING,
   });
 
   Votacao.associate = (models) => {
-    models.Pontos.belongsTo(models.Votacao);
+    models.Ponto.belongsTo(models.Votacao);
   };
 
   return Votacao;
 };
-

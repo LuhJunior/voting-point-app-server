@@ -21,12 +21,12 @@ function errorHandler(err, req, res, next) {
   }
 }
 
-function notFound(req, res) {
+function notFoundHandler(req, res) {
   res.status(404).send({ message: 'Chora' });
 }
 
 module.exports = {
   logErrors,
   errorHandler,
-  notFound,
+  notFoundHandler,
 };
