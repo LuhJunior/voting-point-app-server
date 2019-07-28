@@ -1,6 +1,7 @@
 const {
   createPonto,
   getPontoById,
+  getAllPonto,
   getAllPontoByReuniaoId,
   getAllPontoBySituacaoId,
   upadatePonto,
@@ -17,8 +18,16 @@ async function addPonto(req, res, next) {
 
 async function findPontoById(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getPontoById(parseInt(id, 10));
+    const data = await getPontoById(req.params.id);
+    return res.status(200).send({ ok: true, data });
+  } catch (e) {
+    return next(e);
+  }
+}
+
+async function findAllPonto(req, res, next) {
+  try {
+    const data = await getAllPonto();
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -27,8 +36,7 @@ async function findPontoById(req, res, next) {
 
 async function findAllPontoByReuniaoId(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getAllPontoByReuniaoId(parseInt(id, 10));
+    const data = await getAllPontoByReuniaoId(req.params.id);
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -37,8 +45,17 @@ async function findAllPontoByReuniaoId(req, res, next) {
 
 async function findAllPontoBySituacaoId(req, res, next) {
   try {
+    const data = await getAllPontoBySituacaoId(req.params.id);
+    return res.status(200).send({ ok: true, data });
+  } catch (e) {
+    return next(e);
+  }
+}
+
+async function alterPontoById(req, res, next) {
+  try {
     const { id } = req.params;
-    const data = await getAllPontoBySituacaoId(parseInt(id, 10));
+    const data = await upadatePonto({ id, ...req.body });
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -57,7 +74,9 @@ async function alterPonto(req, res, next) {
 module.exports = {
   addPonto,
   findPontoById,
+  findAllPonto,
   findAllPontoByReuniaoId,
   findAllPontoBySituacaoId,
+  alterPontoById,
   alterPonto,
 };

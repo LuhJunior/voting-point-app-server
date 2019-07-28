@@ -10,7 +10,7 @@ async function createReuniaoType({ tipo }) {
 
 async function getReuniaoTypeById(id) {
   try {
-    return await ReuniaoType.findByPk(id);
+    return await ReuniaoType.findByPk(id, { attributes: ['id', 'tipo'] });
   } catch (e) {
     throw e;
   }
@@ -18,15 +18,20 @@ async function getReuniaoTypeById(id) {
 
 async function getAllReuniaoType() {
   try {
-    return await ReuniaoType.findAll();
+    return await ReuniaoType.findAll({ attributes: ['id', 'tipo'] });
   } catch (e) {
     throw e;
   }
 }
 
-async function updateReuniaoType({ id, tipo }) {
+async function updateReuniaoType({ id, tipo, where }) {
   try {
-    return await ReuniaoType.update({ tipo }, { where: { id } } );
+    if (id) return await ReuniaoType.update({ tipo }, { where: { id } });
+    if (where) return await ReuniaoType.update({ tipo }, { where });
+    const e = new Error('No where clauses on update');
+    e.isOperational = true;
+    e.code = 400;
+    throw e;
   } catch (e) {
     throw e;
   }

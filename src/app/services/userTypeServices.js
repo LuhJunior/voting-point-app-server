@@ -10,7 +10,9 @@ async function createUserType({ tipo }) {
 
 async function getUserType(id) {
   try {
-    return await UserType.findByPk(id);
+    return await UserType.findByPk(id, {
+      attributes: ['tipo'],
+    });
   } catch (e) {
     throw e;
   }
@@ -18,15 +20,20 @@ async function getUserType(id) {
 
 async function getAllUserType() {
   try {
-    return await UserType.findAll();
+    return await UserType.findAll({ attributes: ['id', 'tipo'] });
   } catch (e) {
     throw e;
   }
 }
 
-async function updateUserType({ id, tipo }) {
+async function updateUserType({ id, tipo, where }) {
   try {
-    return UserType.update({ tipo }, { where: { id } });
+    if (id) return await UserType.update({ tipo }, { where: { id } });
+    if (where) return await UserType.update({ tipo }, { where });
+    const e = new Error('No where clauses on update');
+    e.isOperational = true;
+    e.code = 400;
+    throw e;
   } catch (e) {
     throw e;
   }

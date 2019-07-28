@@ -1,6 +1,6 @@
 const {
   createParticipacao,
-  getParticipacaoById,
+  getParticipacaoByUserIdAndReuniaoId,
   getAllParticipacao,
   getAllParticipacaoByUserId,
   getAllParticipacaoByReuniaoId,
@@ -15,10 +15,10 @@ async function addParticipacao(req, res, next) {
   }
 }
 
-async function findParticipacaoById(req, res, next) {
+async function findParticipacaoByUserIdAndReuniaId(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getParticipacaoById(parseInt(id, 10));
+    const { UserId, ReuniaoId } = req.params;
+    const data = await getParticipacaoByUserIdAndReuniaoId(UserId, ReuniaoId);
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -36,8 +36,7 @@ async function findAllParticipacao(req, res, next) {
 
 async function findAllParticipacaoByUserId(req, res, next) {
   try {
-    const { id } = req.parms;
-    const data = await getAllParticipacaoByUserId(parseInt(id, 10));
+    const data = await getAllParticipacaoByUserId(req.params.id);
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -46,8 +45,7 @@ async function findAllParticipacaoByUserId(req, res, next) {
 
 async function findAllParticipacaoByReuniaoId(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getAllParticipacaoByReuniaoId(parseInt(id, 10));
+    const data = await getAllParticipacaoByReuniaoId(req.params.id);
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -56,8 +54,8 @@ async function findAllParticipacaoByReuniaoId(req, res, next) {
 
 module.exports = {
   addParticipacao,
-  findParticipacaoById,
+  findParticipacaoByUserIdAndReuniaId,
   findAllParticipacao,
   findAllParticipacaoByUserId,
   findAllParticipacaoByReuniaoId,
-}
+};

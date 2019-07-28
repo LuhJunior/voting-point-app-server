@@ -10,7 +10,9 @@ async function createVotoType({ tipo }) {
 
 async function getVotoTypeById(id) {
   try {
-    return await VotoType.findByPk(id);
+    return await VotoType.findByPk(id, {
+      attributes: ['id', 'tipo'],
+    });
   } catch (e) {
     throw e;
   }
@@ -18,15 +20,20 @@ async function getVotoTypeById(id) {
 
 async function getAllVotoType() {
   try {
-    return await VotoType.findAll();
+    return await VotoType.findAll({ attributes: ['id', 'tipo'] });
   } catch (e) {
     throw e;
   }
 }
 
-async function updateVotoType({ id, tipo }) {
+async function updateVotoType({ id, tipo, where }) {
   try {
-    return await VotoType.upadate({ tipo }, { where: { id } });
+    if (id) return await VotoType.update({ tipo }, { where: { id } });
+    if (where) return await VotoType.update({ tipo }, { where });
+    const e = new Error('No where clauses on update');
+    e.isOperational = true;
+    e.code = 400;
+    throw e;
   } catch (e) {
     throw e;
   }

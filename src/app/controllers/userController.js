@@ -7,8 +7,7 @@ const {
 
 async function addUser(req, res, next) {
   try {
-    const { nome, matricula } = req.body;
-    const data = await createUser({ nome, matricula });
+    const data = await createUser(req.body);
     return res.status(200).send({ ok: true, data });
   } catch (err) {
     return next(err);
@@ -17,8 +16,7 @@ async function addUser(req, res, next) {
 
 async function findUserById(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getUserById(parseInt(id, 10));
+    const data = await getUserById(req.params.id);
     return res.status(200).send({ ok: true, data });
   } catch (err) {
     return next(err);
@@ -28,8 +26,14 @@ async function findUserById(req, res, next) {
 async function findUserByMatricula(req, res, next) {
   try {
     const { matricula } = req.query;
-    const data = await getUserByMatricula(matricula);
-    return res.status(200).send({ ok: true, data });
+    if (matricula) {
+      const data = await getUserByMatricula(matricula);
+      return res.status(200).send({ ok: true, data });
+    }
+    const e = new Error('No matricula field on query params');
+    e.isOperational = true;
+    e.code = 400;
+    throw e;
   } catch (err) {
     return next(err);
   }
@@ -38,7 +42,7 @@ async function findUserByMatricula(req, res, next) {
 async function alterUserById(req, res, next) {
   try {
     const { id } = req.params;
-    const data = await updateUser({ id: parseInt(id, 10), ...req.body });
+    const data = await updateUser({ id, ...req.body });
     return res.status(200).send({ ok: true, data });
   } catch (err) {
     return next(err);

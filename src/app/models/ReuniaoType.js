@@ -1,10 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
-  const ReuniaoType = sequelize.define('reuniao_type', {
+  const ReuniaoType = sequelize.define('ReuniaoType', {
     tipo: DataTypes.STRING,
+  }, {
+    tableName: 'reuniao_type',
+    underscored: true,
   });
 
   ReuniaoType.associate = (models) => {
-    models.Reuniao.belongsTo(models.ReuniaoType);
+    models.ReuniaoType.hasMany(models.Reuniao);
   };
 
   return ReuniaoType;

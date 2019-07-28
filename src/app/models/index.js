@@ -14,13 +14,13 @@ const sequelize = new Sequelize(database, user, password, {
 const models = {
   UserType: sequelize.import('./UserType'),
   User: sequelize.import('./User'),
-  VotoType: sequelize.import('./VotoType'),
-  Votacao: sequelize.import('./Votacao'),
-  Situacao: sequelize.import('./Situacao'),
-  Ponto: sequelize.import('./Ponto'),
   ReuniaoType: sequelize.import('./ReuniaoType'),
   Reuniao: sequelize.import('./Reuniao'),
+  Situacao: sequelize.import('./Situacao'),
+  Ponto: sequelize.import('./Ponto'),
   Participacao: sequelize.import('./Participacao'),
+  VotoType: sequelize.import('./VotoType'),
+  Votacao: sequelize.import('./Votacao'),
 };
 
 Object.keys(models).forEach((modelName) => {
@@ -29,9 +29,7 @@ Object.keys(models).forEach((modelName) => {
   }
 });
 
-/* Object.keys(models).forEach((name) => {
-  models[name].sync({ alter: true });
-}); */
+// sequelize.sync();
 
 module.exports = {
   ...models,

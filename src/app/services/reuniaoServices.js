@@ -1,8 +1,8 @@
-const { Reuniao } = require('../models');
+const { Reuniao, ReuniaoType } = require('../models');
 
-async function createReuniao({ data, reuniao_type_id }) {
+async function createReuniao({ data, reuniao_type_id: ReuniaoTypeId }) {
   try {
-    return await Reuniao.create({ data, reuniao_type_id });
+    return await Reuniao.create({ data, ReuniaoTypeId });
   } catch (e) {
     throw e;
   }
@@ -10,7 +10,13 @@ async function createReuniao({ data, reuniao_type_id }) {
 
 async function getReuniaoById(id) {
   try {
-    return await Reuniao.findByPk(id);
+    return await Reuniao.findByPk(id, {
+      attributes: ['id', 'data'],
+      include: {
+        model: ReuniaoType,
+        attributes: ['tipo'],
+      },
+    });
   } catch (e) {
     throw e;
   }
@@ -18,21 +24,32 @@ async function getReuniaoById(id) {
 
 async function getAllReuniao() {
   try {
-    return await Reuniao.findAll();
+    return await Reuniao.findAll({
+      attributes: ['id', 'data'],
+      include: {
+        model: ReuniaoType,
+        attributes: ['tipo'],
+      },
+    });
   } catch (e) {
     throw e;
   }
 }
 
-async function updateReuniao({ id, data }) {
+async function updateReuniao({
+  id, data, reuniao_type_id: ReuniaoTypeId, where,
+}) {
   try {
-    return await Reuniao.update({ data }, { where: { id } });
+    if (id) return await Reuniao.update({ data, ReuniaoTypeId }, { where: { id } });
+    if (where) return await Reuniao.update({ data }, { where });
+    const e = new Error('No where clauses on update');
+    e.isOperational = true;
+    e.code = 400;
+    throw e;
   } catch (e) {
     throw e;
   }
 }
-
-
 
 module.exports = {
   createReuniao,

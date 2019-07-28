@@ -3,8 +3,8 @@ const {
   addUserType,
   findUserTypeById,
   findAllUserType,
-  alterUserType,
   alterUserTypeById,
+  alterUserType,
 } = require('../app/controllers/userTypeController');
 
 Router.post('/', addUserType);
@@ -12,7 +12,7 @@ Router.post('/', addUserType);
 Router.get('/', findAllUserType);
 Router.get('/:id', findUserTypeById);
 
-Router.put('/', alterUserType);
 Router.put('/:id', alterUserTypeById);
+Router.put('/', alterUserType);
 
 module.exports = Router;

@@ -1,16 +1,32 @@
-const { Participacao } = require('../models');
+const { Participacao, User, Reuniao } = require('../models');
 
-async function createParticipacao({ user_id: uId, reuniao_id: rId }) {
+async function createParticipacao({ chegada, user_id: UserId, reuniao_id: ReuniaoId }) {
   try {
-    return await Participacao.create({ user_id: uId, reuniao_id: rId });
+    return await Participacao.create({ chegada, UserId, ReuniaoId });
   } catch (e) {
     throw e;
   }
 }
 
-async function getParticipacaoById(id) {
+async function getParticipacaoByUserIdAndReuniaoId(UserId, ReuniaoId) {
   try {
-    return await Participacao.findByPk(id);
+    return await Participacao.findOne({
+      where: {
+        UserId,
+        ReuniaoId,
+      },
+      attributes: ['chegada'],
+      include: [
+        {
+          model: User,
+          attributes: ['nome', 'matricula'],
+        },
+        {
+          model: Reuniao,
+          attributes: ['id', 'data'],
+        },
+      ],
+    });
   } catch (e) {
     throw e;
   }
@@ -18,23 +34,59 @@ async function getParticipacaoById(id) {
 
 async function getAllParticipacao() {
   try {
-    return await Participacao.findAll();
+    return await Participacao.findAll({
+      attributes: ['id', 'chegada'],
+      include: [
+        {
+          model: User,
+          attributes: ['nome', 'matricula'],
+        },
+        {
+          model: Reuniao,
+          attributes: ['id', 'data'],
+        },
+      ],
+    });
   } catch (e) {
     throw e;
   }
 }
 
-async function getAllParticipacaoByUserId(userId) {
+async function getAllParticipacaoByUserId(UserId) {
   try {
-    return await Participacao.findAll({ where: { user_id: userId } });
+    return await Participacao.findAll({ where: { UserId } }, {
+      attributes: ['id', 'chegada'],
+      include: [
+        {
+          model: User,
+          attributes: ['nome', 'matricula'],
+        },
+        {
+          model: Reuniao,
+          attributes: ['id', 'data'],
+        },
+      ],
+    });
   } catch (e) {
     throw e;
   }
 }
 
-async function getAllParticipacaoByReuniaoId(reuniaoId) {
+async function getAllParticipacaoByReuniaoId(ReuniaoId) {
   try {
-    return await Participacao.findAll({ where: { reuniao_id: reuniaoId } });
+    return await Participacao.findAll({ where: { ReuniaoId } }, {
+      attributes: ['id', 'chegada'],
+      include: [
+        {
+          model: User,
+          attributes: ['nome', 'matricula'],
+        },
+        {
+          model: Reuniao,
+          attributes: ['id', 'data'],
+        },
+      ],
+    });
   } catch (e) {
     throw e;
   }
@@ -42,7 +94,7 @@ async function getAllParticipacaoByReuniaoId(reuniaoId) {
 
 module.exports = {
   createParticipacao,
-  getParticipacaoById,
+  getParticipacaoByUserIdAndReuniaoId,
   getAllParticipacao,
   getAllParticipacaoByUserId,
   getAllParticipacaoByReuniaoId,

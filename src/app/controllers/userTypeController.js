@@ -16,8 +16,7 @@ async function addUserType(req, res, next) {
 
 async function findUserTypeById(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getUserType(id);
+    const data = await getUserType(req.params.id);
     return res.status(200).send({ ok: true, data });
   } catch (err) {
     return next(err);
@@ -45,7 +44,7 @@ async function alterUserType(req, res, next) {
 async function alterUserTypeById(req, res, next) {
   try {
     const { id } = req.params;
-    const data = await updateUserType({ id: parseInt(id, 10), ...req.body });
+    const data = await updateUserType({ id, ...req.body });
     return res.status(200).send({ ok: true, data });
   } catch (err) {
     return next(err);

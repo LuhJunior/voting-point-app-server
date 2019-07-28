@@ -16,8 +16,7 @@ async function addSituacao(req, res, next) {
 
 async function findSituacaoById(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await getSituacaoById(parseInt(id, 10));
+    const data = await getSituacaoById(req.params.id);
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -27,6 +26,16 @@ async function findSituacaoById(req, res, next) {
 async function findAllSituacao(req, res, next) {
   try {
     const data = await getAllSituacao();
+    return res.status(200).send({ ok: true, data });
+  } catch (e) {
+    return next(e);
+  }
+}
+
+async function alterSituacaoById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const data = await updateSituacao({ id, ...req.body });
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
@@ -46,5 +55,6 @@ module.exports = {
   addSituacao,
   findSituacaoById,
   findAllSituacao,
+  alterSituacaoById,
   alterSituacao,
 };

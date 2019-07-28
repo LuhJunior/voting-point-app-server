@@ -10,7 +10,7 @@ async function createSituacao({ descricao }) {
 
 async function getSituacaoById(id) {
   try {
-    return await Situacao.findByPk(id);
+    return await Situacao.findByPk(id, { attributes: ['id', 'descricao'] });
   } catch (e) {
     throw e;
   }
@@ -18,15 +18,20 @@ async function getSituacaoById(id) {
 
 async function getAllSituacao() {
   try {
-    return await Situacao.findAll();
+    return await Situacao.findAll({ attributes: ['id', 'descricao'] });
   } catch (e) {
     throw e;
   }
 }
 
-async function updateSituacao({ id, descricao }) {
+async function updateSituacao({ id, descricao, where }) {
   try {
-    return await Situacao.upadte({ descricao }, { where: { id } });
+    if (id) return await Situacao.update({ descricao }, { where: { id } });
+    if (where) return await Situacao.update({ descricao }, { where });
+    const e = new Error('No where clauses on update');
+    e.isOperational = true;
+    e.code = 400;
+    throw e;
   } catch (e) {
     throw e;
   }

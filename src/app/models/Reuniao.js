@@ -1,10 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-  const Reuniao = sequelize.define('reuniao', {
+  const Reuniao = sequelize.define('Reuniao', {
     data: DataTypes.DATE,
+  }, {
+    tableName: 'reuniao',
+    underscored: true,
   });
 
   Reuniao.associate = (models) => {
-    models.Participacao.belongsTo(models.Reuniao);
+    models.Reuniao.belongsTo(models.ReuniaoType);
+    models.Reuniao.hasMany(models.Ponto);
+    models.Reuniao.belongsToMany(models.User, { through: models.Participacao });
   };
 
   return Reuniao;

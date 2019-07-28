@@ -3,8 +3,8 @@ const {
   addUser,
   findUserById,
   findUserByMatricula,
-  alterUser,
   alterUserById,
+  alterUser,
 } = require('../app/controllers/userController');
 
 Router.post('/', addUser);
@@ -12,7 +12,7 @@ Router.post('/', addUser);
 Router.get('/', findUserByMatricula);
 Router.get('/:id', findUserById);
 
-Router.put('/', alterUser);
 Router.put('/:id', alterUserById);
+Router.put('/', alterUser);
 
 module.exports = Router;

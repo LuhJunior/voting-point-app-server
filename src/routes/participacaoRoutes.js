@@ -1,7 +1,7 @@
 const Router = require('express').Router();
 const {
   addParticipacao,
-  findParticipacaoById,
+  findParticipacaoByUserIdAndReuniaId,
   findAllParticipacao,
   findAllParticipacaoByUserId,
   findAllParticipacaoByReuniaoId,
@@ -9,7 +9,7 @@ const {
 
 Router.post('/', addParticipacao);
 
-Router.get('/:id', findParticipacaoById);
+Router.get('/:UserId/:ReuniaoId', findParticipacaoByUserIdAndReuniaId);
 Router.get('/', findAllParticipacao);
 Router.get('/user/:id', findAllParticipacaoByUserId);
 Router.get('/reuniao/:id', findAllParticipacaoByReuniaoId);
