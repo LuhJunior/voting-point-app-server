@@ -12,8 +12,8 @@ const votoType = require('./votoTypeRoutes');
 
 function useRoutes(app) {
   app.use('/sign_in', signIn);
-  app.use('/users', checkAuth, users);
-  app.use('/user_type', checkAuth, userType);
+  app.use('/users', users);
+  app.use('/user_type', userType);
   app.use('/participacao', checkAuth, participacao);
   app.use('/ponto', checkAuth, ponto);
   app.use('/situacao', checkAuth, situacao);

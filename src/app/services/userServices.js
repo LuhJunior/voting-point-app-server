@@ -40,6 +40,7 @@ async function getUserByMatricula(matricula) {
         matricula,
       },
       attributes: [
+        'id',
         'nome',
         'matricula',
         'senha',
