@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Reuniao = sequelize.define('Reuniao', {
     data: DataTypes.DATE,
+    anexo: DataTypes.STRING,
   }, {
     tableName: 'reuniao',
     underscored: true,
