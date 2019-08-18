@@ -13,9 +13,16 @@ async function auth({ matricula, senha }) {
       e.code = 400;
       throw e;
     }
-    const { id, senha: userPass } = data;
-    if (await bcrypt.compare(senha, userPass)) return jwt.sign({ id }, jSecret);
-
+    const {
+      id, nome, senha: userPass, UserType: { tipo },
+    } = data;
+    if (await bcrypt.compare(senha, userPass)) {
+      return ({
+        jwt: jwt.sign({ id }, jSecret),
+        nome,
+        tipo,
+      });
+    }
     const e = new Error('Senha inválida');
     e.isOperational = true;
     e.code = 400;
