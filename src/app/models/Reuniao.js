@@ -1,6 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Reuniao = sequelize.define('Reuniao', {
-    data: DataTypes.DATE,
+    data: DataTypes.DATEONLY,
+    hora_inicio: DataTypes.TIME,
+    hora_fim: DataTypes.TIME,
     anexo: DataTypes.STRING,
   }, {
     tableName: 'reuniao',

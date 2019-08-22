@@ -1,8 +1,15 @@
-const { Reuniao, ReuniaoType } = require('../models');
+const { Reuniao, ReuniaoType, Ponto } = require('../models');
 
-async function createReuniao({ data, reuniao_type_id: ReuniaoTypeId }) {
+async function createReuniao({
+  data, hora_inicio: inicio, hora_fim: fim, reuniao_type_id: ReuniaoTypeId,
+}) {
   try {
-    return await Reuniao.create({ data, ReuniaoTypeId });
+    return await Reuniao.create({
+      data,
+      hora_inicio: inicio,
+      hora_fim: fim,
+      ReuniaoTypeId,
+    });
   } catch (e) {
     throw e;
   }
@@ -11,11 +18,17 @@ async function createReuniao({ data, reuniao_type_id: ReuniaoTypeId }) {
 async function getReuniaoById(id) {
   try {
     return await Reuniao.findByPk(id, {
-      attributes: ['id', 'data'],
-      include: {
-        model: ReuniaoType,
-        attributes: ['tipo'],
-      },
+      attributes: ['id', 'data', 'hora_inicio', 'hora_fim'],
+      include: [
+        {
+          model: ReuniaoType,
+          attributes: ['tipo'],
+        },
+        {
+          model: Ponto,
+          attributes: ['ponto'],
+        },
+      ],
     });
   } catch (e) {
     throw e;
@@ -25,11 +38,20 @@ async function getReuniaoById(id) {
 async function getAllReuniao() {
   try {
     return await Reuniao.findAll({
-      attributes: ['id', 'data'],
-      include: {
-        model: ReuniaoType,
-        attributes: ['tipo'],
-      },
+      attributes: ['id', 'data', 'hora_inicio', 'hora_fim'],
+      include: [
+        {
+          model: ReuniaoType,
+          attributes: ['tipo'],
+        },
+        {
+          model: Ponto,
+          attributes: ['ponto'],
+        },
+      ],
+      order: [
+        ['data', 'ASC'],
+      ],
     });
   } catch (e) {
     throw e;
