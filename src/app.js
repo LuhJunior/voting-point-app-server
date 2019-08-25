@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const useRoutes = require('./routes');
 const { useMiddlewares } = require('./middlewares');
+const { useListeners } = require('./app/socket');
 
 const App = () => {
   const app = express();
@@ -17,7 +18,7 @@ const App = () => {
 
   useRoutes(app);
   useMiddlewares(app);
-
+  useListeners(ioServer);
   return ({
     app,
     httpServer,
