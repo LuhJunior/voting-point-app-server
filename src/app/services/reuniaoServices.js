@@ -74,7 +74,7 @@ async function getCurrentReuniao() {
         },
       ],
       order: [
-        ['data', 'ASC'],
+        ['hora_inicio', 'ASC'],
       ],
     });
   } catch (e) {
