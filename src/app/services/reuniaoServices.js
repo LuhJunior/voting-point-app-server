@@ -58,6 +58,30 @@ async function getAllReuniao() {
   }
 }
 
+async function getCurrentReuniao() {
+  try {
+    return await Reuniao.findAll({
+      attributes: ['id', 'data', 'hora_inicio', 'hora_fim'],
+      where: { data: new Date().toISOString() },
+      include: [
+        {
+          model: ReuniaoType,
+          attributes: ['tipo'],
+        },
+        {
+          model: Ponto,
+          attributes: ['ponto'],
+        },
+      ],
+      order: [
+        ['data', 'ASC'],
+      ],
+    });
+  } catch (e) {
+    throw e;
+  }
+}
+
 async function updateReuniao({
   id, data, reuniao_type_id: ReuniaoTypeId, where,
 }) {
@@ -77,5 +101,6 @@ module.exports = {
   createReuniao,
   getReuniaoById,
   getAllReuniao,
+  getCurrentReuniao,
   updateReuniao,
 };

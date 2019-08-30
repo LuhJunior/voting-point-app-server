@@ -2,6 +2,7 @@ const {
   createReuniao,
   getReuniaoById,
   getAllReuniao,
+  getCurrentReuniao,
   updateReuniao,
 } = require('../services/reuniaoServices');
 
@@ -32,6 +33,15 @@ async function findAllReuniao(req, res, next) {
   }
 }
 
+async function findCurrentReuniao(req, res, next) {
+  try {
+    const data = await getCurrentReuniao();
+    return res.status(200).send({ ok: true, data });
+  } catch (e) {
+    return next(e);
+  }
+}
+
 async function alterReuniaoById(req, res, next) {
   try {
     const { id } = req.params;
@@ -55,6 +65,7 @@ module.exports = {
   addReuniao,
   findReuniaoById,
   findAllReuniao,
+  findCurrentReuniao,
   alterReuniaoById,
   alterReuniao,
 };

@@ -9,9 +9,9 @@ const {
 
 Router.post('/', addParticipacao);
 
-Router.get('/:UserId/:ReuniaoId', findParticipacaoByUserIdAndReuniaId);
 Router.get('/', findAllParticipacao);
 Router.get('/user/:id', findAllParticipacaoByUserId);
 Router.get('/reuniao/:id', findAllParticipacaoByReuniaoId);
+Router.get('/:UserId/:ReuniaoId', findParticipacaoByUserIdAndReuniaId);
 
 module.exports = Router;

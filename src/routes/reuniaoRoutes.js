@@ -3,16 +3,18 @@ const {
   addReuniao,
   findReuniaoById,
   findAllReuniao,
+  findCurrentReuniao,
   alterReuniaoById,
   alterReuniao,
 } = require('../app/controllers/reuniaoController');
 
 Router.post('/', addReuniao);
 
-Router.get('/:id', findReuniaoById);
+Router.get('/current', findCurrentReuniao);
 Router.get('/', findAllReuniao);
+Router.get('/:id', findReuniaoById);
 
-Router.put('/:id', alterReuniaoById);
 Router.put('/', alterReuniao);
+Router.put('/:id', alterReuniaoById);
 
 module.exports = Router;

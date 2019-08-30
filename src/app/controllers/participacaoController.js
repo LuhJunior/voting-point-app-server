@@ -8,7 +8,7 @@ const {
 
 async function addParticipacao(req, res, next) {
   try {
-    const data = await createParticipacao(req.body);
+    const data = await createParticipacao({ user_id: req.user_id, ...req.body });
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);
