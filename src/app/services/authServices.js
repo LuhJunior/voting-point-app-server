@@ -19,6 +19,7 @@ async function auth({ matricula, senha }) {
     if (await bcrypt.compare(senha, userPass)) {
       return ({
         jwt: jwt.sign({ id }, jSecret),
+        id,
         nome,
         tipo,
       });

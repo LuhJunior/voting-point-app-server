@@ -50,7 +50,7 @@ async function getAllReuniao() {
         },
       ],
       order: [
-        ['data', 'ASC'],
+        ['data', 'DESC'],
       ],
     });
   } catch (e) {

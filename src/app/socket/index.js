@@ -1,12 +1,18 @@
 const {
+  handleCreateRoom,
+  handleJoinRoom,
+  handleLeaveRoom,
   handleStartMeeting,
   handleParticipacaoCount,
-} = require('./userSocket');
+} = require('./events');
 
 const useListeners = (io) => {
   io.on('connection', (socket) => {
-    socket.on('StartMeeting', () => handleStartMeeting(socket));
+    socket.on('create_room', ({ secretaryId }) => handleCreateRoom(socket, secretaryId));
+    socket.on('join_room', ({ userId }) => handleJoinRoom(socket, userId));
+    socket.on('start_meeting', () => handleStartMeeting(socket));
     socket.on('quorum_count', () => handleParticipacaoCount(socket));
+    socket.on('disconnect', () => handleLeaveRoom(socket));
   });
 };
 
