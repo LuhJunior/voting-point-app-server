@@ -25,8 +25,24 @@ function handleLeaveRoom(socket) {
   }
 }
 
-function handleStartMeeting(socket) {
-  socket.broadcast.emit('pauta');
+function handleStartMeeting(socket, secretaryId) {
+  if (room && room.leader.secretaryId === secretaryId) {
+    socket.broadcast.emit('start_meeting');
+    socket.emit('start_meeting');
+  }
+}
+
+function handleNextTopic(socket, secretaryId) {
+  if (room && room.leader.secretaryId === secretaryId) {
+    socket.broadcast.emit('next_topic');
+    socket.emit('next_topic');
+  }
+}
+
+function handleStartVote(socket, secretaryId) {
+  if (room && room.leader.secretaryId === secretaryId) {
+    socket.broadcast.emit('start_vote');
+  }
 }
 
 function handleParticipacaoCount(socket) {
@@ -38,5 +54,7 @@ module.exports = {
   handleJoinRoom,
   handleLeaveRoom,
   handleStartMeeting,
+  handleNextTopic,
+  handleStartVote,
   handleParticipacaoCount,
 };
