@@ -3,12 +3,9 @@ const { createRoom } = require('./roomUtils');
 let room = null;
 
 async function handleCreateRoom(socket, secretaryId) {
-  if (room && room.leader.secretaryId === secretaryId) {
-    room.leader.socketId = socket.id;
-    socket.emit('quorum_count', { count: room.countMembers() });
-  } else {
-    room = await createRoom(secretaryId, socket.id);
-  }
+  room = await createRoom(secretaryId, socket.id);
+  room.leader.socketId = socket.id;
+  socket.broadcast.emit('quorum', { count: room.countMembers() });
 }
 
 function handleJoinRoom(socket, userId) {
@@ -32,16 +29,24 @@ function handleStartMeeting(socket, secretaryId) {
   }
 }
 
-function handleNextTopic(socket, secretaryId) {
+function handleNextTopic(socket, secretaryId, ponto) {
   if (room && room.leader.secretaryId === secretaryId) {
-    socket.broadcast.emit('next_topic');
-    socket.emit('next_topic');
+    socket.broadcast.emit('next_topic', { ponto });
+    socket.emit('next_topic', { ponto });
   }
 }
 
 function handleStartVote(socket, secretaryId) {
   if (room && room.leader.secretaryId === secretaryId) {
     socket.broadcast.emit('start_vote');
+  }
+}
+
+function handleEndMeeting(socket, secretaryId) {
+  if (room && room.leader.secretaryId === secretaryId) {
+    room = null;
+    socket.broadcast.emit('end_meeting');
+    socket.emit('end_meeting');
   }
 }
 
@@ -56,5 +61,6 @@ module.exports = {
   handleStartMeeting,
   handleNextTopic,
   handleStartVote,
+  handleEndMeeting,
   handleParticipacaoCount,
 };

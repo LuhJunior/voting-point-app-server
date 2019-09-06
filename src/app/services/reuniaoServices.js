@@ -26,7 +26,7 @@ async function getReuniaoById(id) {
         },
         {
           model: Ponto,
-          attributes: ['ponto'],
+          attributes: ['id', 'ponto'],
         },
       ],
     });
@@ -46,7 +46,7 @@ async function getAllReuniao() {
         },
         {
           model: Ponto,
-          attributes: ['ponto'],
+          attributes: ['id', 'ponto'],
         },
       ],
       order: [
@@ -70,7 +70,7 @@ async function getCurrentReuniao() {
         },
         {
           model: Ponto,
-          attributes: ['ponto'],
+          attributes: ['id', 'ponto'],
         },
       ],
       order: [
