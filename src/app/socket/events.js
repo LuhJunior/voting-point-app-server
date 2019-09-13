@@ -3,15 +3,26 @@ const { createRoom } = require('./roomUtils');
 let room = null;
 
 async function handleCreateRoom(socket, secretaryId) {
-  room = await createRoom(secretaryId, socket.id);
-  room.leader.socketId = socket.id;
-  socket.broadcast.emit('quorum', { count: room.countMembers() });
+  try {
+    room = await createRoom(secretaryId, socket.id);
+    room.leader.socketId = socket.id;
+    socket.broadcast.emit('quorum', { count: room.countMembers() });
+  } catch (e) {
+    throw e;
+  }
+}
+
+function handleCheckRoom(socket) {
+  if (room) {
+    socket.emit('quorum');
+  }
 }
 
 function handleJoinRoom(socket, userId) {
   if (room) {
     room.addMember(socket.id, userId);
     socket.to(room.leader.socketId).emit('quorum_count', { count: room.countMembers() });
+    socket.emit('quorum');
   }
 }
 
@@ -51,11 +62,14 @@ function handleEndMeeting(socket, secretaryId) {
 }
 
 function handleParticipacaoCount(socket) {
-  if (room) socket.broadcast.emit('quorum_count', { count: room.countMembers() });
+  if (room) {
+    if (room.leader.socketId === socket.id) socket.emit('quorum_count', { count: room.countMembers() });
+  }
 }
 
 module.exports = {
   handleCreateRoom,
+  handleCheckRoom,
   handleJoinRoom,
   handleLeaveRoom,
   handleStartMeeting,

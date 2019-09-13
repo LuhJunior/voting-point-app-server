@@ -1,4 +1,10 @@
-const { Reuniao, ReuniaoType, Ponto } = require('../models');
+const {
+  Reuniao,
+  ReuniaoType,
+  Ponto,
+  User,
+  Votacao,
+} = require('../models');
 
 async function createReuniao({
   data, hora_inicio: inicio, hora_fim: fim, reuniao_type_id: ReuniaoTypeId,
@@ -25,7 +31,7 @@ async function getReuniaoById(id) {
           attributes: ['tipo'],
         },
         {
-          model: Ponto,
+          association: 'Ponto',
           attributes: ['id', 'ponto'],
         },
       ],
@@ -45,7 +51,7 @@ async function getAllReuniao() {
           attributes: ['tipo'],
         },
         {
-          model: Ponto,
+          association: 'Ponto',
           attributes: ['id', 'ponto'],
         },
       ],
@@ -65,12 +71,23 @@ async function getCurrentReuniao() {
       where: { data: new Date().toISOString() },
       include: [
         {
-          model: ReuniaoType,
+          association: 'ReuniaoType',
           attributes: ['tipo'],
         },
         {
-          model: Ponto,
+          association: 'Ponto',
           attributes: ['id', 'ponto'],
+          include: [
+            {
+              model: User,
+            },
+          ],
+          order: [
+            ['id', 'DESC'],
+          ],
+        },
+        {
+          model: User,
         },
       ],
       order: [

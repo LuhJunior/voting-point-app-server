@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Ponto = sequelize.define('Ponto', {
     ponto: DataTypes.STRING,
+    anexo: DataTypes.STRING,
   }, {
     tableName: 'ponto',
     underscored: true,

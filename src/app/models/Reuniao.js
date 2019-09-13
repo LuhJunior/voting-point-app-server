@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
     data: DataTypes.DATEONLY,
     hora_inicio: DataTypes.TIME,
     hora_fim: DataTypes.TIME,
-    anexo: DataTypes.STRING,
   }, {
     tableName: 'reuniao',
     underscored: true,
@@ -11,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Reuniao.associate = (models) => {
     models.Reuniao.belongsTo(models.ReuniaoType);
-    models.Reuniao.hasMany(models.Ponto);
+    models.Reuniao.hasMany(models.Ponto, { as: 'Ponto' });
     models.Reuniao.belongsToMany(models.User, { through: models.Participacao });
   };
 
