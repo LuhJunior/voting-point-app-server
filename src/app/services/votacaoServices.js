@@ -106,7 +106,7 @@ async function getAllVotacaoByPontoId(PontoId) {
           attributes: ['ponto'],
         },
         {
-          model: VotoType,
+          association: 'VotoType',
           attributes: ['tipo'],
         },
       ],

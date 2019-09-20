@@ -91,7 +91,7 @@ async function getCurrentReuniao() {
         },
       ],
       order: [
-        ['hora_inicio', 'ASC'],
+        ['hora_inicio', 'DESC'],
       ],
     });
   } catch (e) {

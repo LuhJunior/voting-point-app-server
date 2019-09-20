@@ -4,6 +4,11 @@ class Room {
       secretaryId,
       socketId,
     };
+    this.meeting = {
+      currentPoint: -1,
+      timer: 30,
+      interId: null,
+    };
     this.members = new Map();
   }
 
@@ -19,6 +24,34 @@ class Room {
 
   countMembers() {
     return this.members.size;
+  }
+
+  changePoint(point) {
+    this.meeting.currentPoint = point;
+  }
+
+  startCount() {
+    this.meeting.interId = setInterval(() => {
+      if (this.meeting.timer > 0) {
+        this.meeting.timer -= 1;
+        this.startCount();
+      } else {
+        clearInterval(this.meeting.interId);
+        this.meeting.timer = 30;
+      }
+    }, 1000);
+  }
+
+  countDown() {
+    this.meeting.timer = 30;
+    this.meeting.interId = setInterval(() => {
+      if (this.meeting.timer !== 0) {
+        this.meeting.timer -= 1;
+      } else {
+        clearInterval(this.meeting.interId);
+        this.meeting.timer = 30;
+      }
+    }, 1000);
   }
 }
 

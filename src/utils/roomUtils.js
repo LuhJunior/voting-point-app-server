@@ -1,5 +1,5 @@
-const Room = require('./Room');
-const { getUserById } = require('../services/userServices');
+const Room = require('../app/socket/Room');
+const { getUserById } = require('../app/services/userServices');
 
 async function createRoom(secretaryId, socketId) {
   const user = await getUserById(secretaryId);
