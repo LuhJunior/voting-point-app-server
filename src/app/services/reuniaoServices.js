@@ -1,19 +1,24 @@
 const {
   Reuniao,
   ReuniaoType,
-  Ponto,
-  User,
-  Votacao,
+  Sequelize: { fn, col },
 } = require('../models');
 
+const attributes = ['id', 'titulo', 'data', 'hora_inicio', 'hora_segunda_chamada'];
+
 async function createReuniao({
-  data, hora_inicio: inicio, hora_fim: fim, reuniao_type_id: ReuniaoTypeId,
+  data,
+  titulo,
+  hora_inicio: inicio,
+  hora_segunda_chamada: segundaChamada,
+  reuniao_type_id: ReuniaoTypeId,
 }) {
   try {
     return await Reuniao.create({
+      titulo,
       data,
       hora_inicio: inicio,
-      hora_fim: fim,
+      hora_segunda_chamada: segundaChamada,
       ReuniaoTypeId,
     });
   } catch (e) {
@@ -24,7 +29,7 @@ async function createReuniao({
 async function getReuniaoById(id) {
   try {
     return await Reuniao.findByPk(id, {
-      attributes: ['id', 'data', 'hora_inicio', 'hora_fim'],
+      attributes,
       include: [
         {
           model: ReuniaoType,
@@ -44,7 +49,7 @@ async function getReuniaoById(id) {
 async function getAllReuniao() {
   try {
     return await Reuniao.findAll({
-      attributes: ['id', 'data', 'hora_inicio', 'hora_fim'],
+      attributes,
       include: [
         {
           model: ReuniaoType,
@@ -54,9 +59,14 @@ async function getAllReuniao() {
           association: 'Ponto',
           attributes: ['id', 'ponto'],
         },
+        {
+          association: 'ReuniaoStatus',
+          attributes: ['id', 'descricao'],
+        },
       ],
       order: [
         ['data', 'DESC'],
+        ['hora_inicio', 'DESC'],
       ],
     });
   } catch (e) {
@@ -66,8 +76,8 @@ async function getAllReuniao() {
 
 async function getCurrentReuniao() {
   try {
-    return await Reuniao.findAll({
-      attributes: ['id', 'data', 'hora_inicio', 'hora_fim'],
+    return await Reuniao.findOne({
+      attributes,
       where: { data: new Date().toISOString() },
       include: [
         {
@@ -75,6 +85,14 @@ async function getCurrentReuniao() {
           attributes: ['tipo'],
         },
         {
+          association: 'ReuniaoStatus',
+          attributes: ['descricao'],
+          where: {
+            descricao: 'Habilitada',
+          },
+          require: true,
+        },
+        /* {
           association: 'Ponto',
           attributes: ['id', 'ponto'],
           include: [
@@ -83,12 +101,12 @@ async function getCurrentReuniao() {
             },
           ],
           order: [
-            ['id', 'DESC'],
+            ['id', 'ASC'],
           ],
         },
         {
           model: User,
-        },
+        }, */
       ],
       order: [
         ['hora_inicio', 'DESC'],
@@ -100,15 +118,33 @@ async function getCurrentReuniao() {
 }
 
 async function updateReuniao({
-  id, data, reuniao_type_id: ReuniaoTypeId, where,
+  id, data, reuniao_type_id: ReuniaoTypeId, reuniao_status_id: ReuniaoStatusId, where,
 }) {
   try {
-    if (id) return await Reuniao.update({ data, ReuniaoTypeId }, { where: { id } });
+    if (id) return Reuniao.update({ data, ReuniaoTypeId, ReuniaoStatusId }, { where: { id } });
     if (where) return await Reuniao.update({ data }, { where });
     const e = new Error('No where clauses on update');
     e.isOperational = true;
     e.code = 400;
     throw e;
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function updateReuniaoStatus({
+  id, reuniao_status_id: ReuniaoStatusId,
+}) {
+  try {
+    return Reuniao.update({ ReuniaoStatusId }, { where: { id } });
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function deleteReuniaoById(id) {
+  try {
+    return await Reuniao.destroy({ reuniao_id: id });
   } catch (e) {
     throw e;
   }
@@ -120,4 +156,6 @@ module.exports = {
   getAllReuniao,
   getCurrentReuniao,
   updateReuniao,
+  updateReuniaoStatus,
+  deleteReuniaoById,
 };

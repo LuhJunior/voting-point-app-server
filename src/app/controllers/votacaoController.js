@@ -6,10 +6,13 @@ const {
   getAllVotacaoByPontoId,
   updateVotacao,
 } = require('../services/votacaoServices');
+const { getVotoTypeByType } = require('../services/votoTypeServices');
 
 async function addVotacao(req, res, next) {
   try {
-    const data = await createVotacao(req.body);
+    const { voto_type: tipo, ...body } = req.body;
+    const { id } = await getVotoTypeByType(tipo);
+    const data = await createVotacao({ voto_type_id: id, ...body });
     return res.status(200).send({ ok: true, data });
   } catch (e) {
     return next(e);

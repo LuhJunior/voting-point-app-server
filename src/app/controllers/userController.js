@@ -2,6 +2,7 @@ const {
   createUser,
   getUserById,
   getUserByMatricula,
+  getAllUser,
   updateUser,
 } = require('../services/userServices');
 
@@ -39,6 +40,15 @@ async function findUserByMatricula(req, res, next) {
   }
 }
 
+async function findAllUser(req, res, next) {
+  try {
+    const data = await getAllUser();
+    return res.status(200).send({ ok: true, data });
+  } catch (err) {
+    return next(err);
+  }
+}
+
 async function alterUserById(req, res, next) {
   try {
     const { id } = req.params;
@@ -64,4 +74,5 @@ module.exports = {
   findUserByMatricula,
   alterUser,
   alterUserById,
+  findAllUser,
 };

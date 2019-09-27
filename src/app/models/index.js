@@ -16,6 +16,7 @@ const models = {
   UserType: sequelize.import('./UserType'),
   User: sequelize.import('./User'),
   ReuniaoType: sequelize.import('./ReuniaoType'),
+  ReuniaoStatus: sequelize.import('./ReuniaoStatus'),
   Reuniao: sequelize.import('./Reuniao'),
   Situacao: sequelize.import('./Situacao'),
   Participacao: sequelize.import('./Participacao'),

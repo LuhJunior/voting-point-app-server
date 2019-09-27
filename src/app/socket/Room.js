@@ -5,8 +5,9 @@ class Room {
       socketId,
     };
     this.meeting = {
+      etapa: 'quorum_count',
       currentPoint: -1,
-      timer: 30,
+      timer: 10,
       interId: null,
     };
     this.members = new Map();
@@ -26,32 +27,40 @@ class Room {
     return this.members.size;
   }
 
+  updateSocketLeader(id) {
+    this.leader.socketId = id;
+  }
+
   changePoint(point) {
     this.meeting.currentPoint = point;
   }
 
-  startCount() {
+  /* startCount() {
     this.meeting.interId = setInterval(() => {
       if (this.meeting.timer > 0) {
         this.meeting.timer -= 1;
         this.startCount();
       } else {
         clearInterval(this.meeting.interId);
-        this.meeting.timer = 30;
+        this.meeting.timer = 10;
       }
     }, 1000);
-  }
+  } */
 
   countDown() {
-    this.meeting.timer = 30;
+    this.meeting.timer = 10;
     this.meeting.interId = setInterval(() => {
       if (this.meeting.timer !== 0) {
         this.meeting.timer -= 1;
       } else {
         clearInterval(this.meeting.interId);
-        this.meeting.timer = 30;
+        this.meeting.timer = 10;
       }
     }, 1000);
+  }
+
+  changeEtapa(etapa) {
+    this.meeting.etapa = etapa;
   }
 }
 

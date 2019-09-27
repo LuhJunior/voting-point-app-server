@@ -15,7 +15,7 @@ function logErrors(err, req, res, next) {
 
 function errorHandler(err, req, res, next) {
   if (err.isOperational) {
-    res.status(err.code).send({ error: err.message });
+    res.status(err.code).send({ data: err });
   } else {
     res.status(500).send({ error: 'Ocorreu um erro' });
   }

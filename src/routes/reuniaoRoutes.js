@@ -5,7 +5,9 @@ const {
   findAllReuniao,
   findCurrentReuniao,
   alterReuniaoById,
+  alterReuniaoStatusById,
   alterReuniao,
+  removeReuniaoById,
 } = require('../app/controllers/reuniaoController');
 
 Router.post('/', addReuniao);
@@ -16,5 +18,8 @@ Router.get('/:id', findReuniaoById);
 
 Router.put('/', alterReuniao);
 Router.put('/:id', alterReuniaoById);
+Router.put('/status/:id', alterReuniaoStatusById);
+
+Router.delete('/:id', removeReuniaoById);
 
 module.exports = Router;

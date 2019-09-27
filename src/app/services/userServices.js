@@ -33,6 +33,25 @@ async function getUserById(id) {
   }
 }
 
+async function getAllUser() {
+  try {
+    const data = await User.findAll({
+      attributes: [
+        'id',
+        'nome',
+        'matricula',
+      ],
+      include: [{
+        model: UserType,
+        attributes: ['tipo'],
+      }],
+    });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
 async function getUserByMatricula(matricula) {
   try {
     const data = await User.findOne({
@@ -74,5 +93,6 @@ module.exports = {
   createUser,
   getUserById,
   getUserByMatricula,
+  getAllUser,
   updateUser,
 };

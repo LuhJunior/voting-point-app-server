@@ -10,6 +10,7 @@ const {
   handleNextTopic,
   handleStartVote,
   handleVotationResult,
+  handleMinervaVote,
   handleEndMeeting,
   handleRecoverMeeting,
 } = require('./events');
@@ -25,6 +26,7 @@ const useListeners = (io) => {
     socket.on('next_topic', ({ secretaryId, ponto }) => handleNextTopic(socket, secretaryId, ponto));
     socket.on('start_vote', ({ secretaryId }) => handleStartVote(socket, secretaryId));
     socket.on('votation_result', ({ secretaryId }) => handleVotationResult(socket, secretaryId));
+    socket.on('minerva_vote', ({ vote }) => handleMinervaVote(socket, vote));
     socket.on('end_meeting', ({ secretaryId }) => handleEndMeeting(socket, secretaryId));
     socket.on('quorum_count', () => handleParticipacaoCount(socket));
     socket.on('recover_meeting', () => handleRecoverMeeting(socket));

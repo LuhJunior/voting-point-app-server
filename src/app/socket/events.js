@@ -3,20 +3,30 @@ const { getAllParticipacaoByReuniaoId } = require('../services/participacaoServi
 
 let room = null;
 
-async function handleEtapa(socket, id, tipo, reuniaoId) {
+async function handleEtapa(socket, id) {
   if (room === null) {
     socket.emit('etapa', { etapa: 'criar_sala' });
   } else {
     try {
-      const data = await getAllParticipacaoByReuniaoId(reuniaoId);
-      if (data.length === 0) {
-        if (room.leader.userId !== id) {
-          room.addMember(socket.id, id);
-          socket.to(room.leader.socketId).emit('quorum_count', { count: room.countMembers() });
-        }
-        socket.emit('etapa', { etapa: 'quorum' });
-      } else {
-        socket.emit('etapa', { etapa: 'votation', ponto: room.meeting.currentPoint });
+      switch (room.meeting.etapa) {
+        case 'quorum':
+          if (room.leader.secretaryId !== id) {
+            room.addMember(socket.id, id);
+            socket.to(room.leader.socketId).emit('quorum_count', { count: room.countMembers() });
+          } else if (room.leader.socketId !== socket.id) {
+            room.updateSocketLeader(socket.id);
+          }
+          socket.emit('etapa', { etapa: 'quorum' });
+          break;
+        case 'votation':
+          socket.emit('etapa', { etapa: 'votation', ponto: room.meeting.currentPoint });
+          break;
+        case 'votation_result':
+          socket.emit('etapa', { etapa: 'votation', ponto: room.meeting.currentPoint });
+          socket.emit('votation_result');
+          break;
+        default:
+          break;
       }
     } catch (e) {
       throw e;
@@ -27,13 +37,15 @@ async function handleEtapa(socket, id, tipo, reuniaoId) {
 async function handleCreateRoom(socket, secretaryId, reuniaoId) {
   try {
     room = await createRoom(secretaryId, socket.id);
-    room.leader.socketId = socket.id;
     const data = await getAllParticipacaoByReuniaoId(reuniaoId);
     if (data.length === 0) {
+      socket.emit('quorum', { count: room.countMembers() });
       socket.broadcast.emit('quorum', { count: room.countMembers() });
+      room.changeEtapa('quorum');
     } else {
       socket.emit('etapa', { etapa: 'votation', ponto: room.meeting.currentPoint });
       socket.broadcast.emit('etapa', { etapa: 'votation', ponto: room.meeting.currentPoint });
+      room.changeEtapa('votation');
     }
   } catch (e) {
     throw e;
@@ -65,6 +77,7 @@ function handleStartMeeting(socket, secretaryId) {
   if (room && room.leader.secretaryId === secretaryId) {
     socket.broadcast.emit('start_meeting');
     socket.emit('start_meeting');
+    room.changeEtapa('votation');
   }
 }
 
@@ -79,6 +92,7 @@ function handleNextTopic(socket, secretaryId, ponto) {
 function handleStartVote(socket, secretaryId) {
   if (room && room.leader.secretaryId === secretaryId) {
     socket.broadcast.emit('start_vote');
+    socket.emit('start_vote');
     room.countDown();
   }
 }
@@ -87,6 +101,14 @@ function handleVotationResult(socket, secretaryId) {
   if (room && room.leader.secretaryId === secretaryId) {
     socket.broadcast.emit('votation_result');
     socket.emit('votation_result');
+    room.changeEtapa('votation_result');
+  }
+}
+
+function handleMinervaVote(socket, vote) {
+  if (room) {
+    socket.broadcast.emit('minerva_vote', { vote });
+    socket.emit('minerva_vote', { vote });
   }
 }
 
@@ -95,6 +117,7 @@ function handleEndMeeting(socket, secretaryId) {
     room = null;
     socket.broadcast.emit('end_meeting');
     socket.emit('end_meeting');
+    /* room.changeEtapa('end_meeting'); */
   }
 }
 
@@ -126,6 +149,7 @@ module.exports = {
   handleVotingTime,
   handleStartVote,
   handleVotationResult,
+  handleMinervaVote,
   handleEndMeeting,
   handleParticipacaoCount,
   handleRecoverMeeting,

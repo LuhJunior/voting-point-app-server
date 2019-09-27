@@ -18,6 +18,19 @@ async function getVotoTypeById(id) {
   }
 }
 
+async function getVotoTypeByType(tipo) {
+  try {
+    return await VotoType.findOne({
+      attributes: ['id', 'tipo'],
+      where: {
+        tipo,
+      },
+    });
+  } catch (e) {
+    throw e;
+  }
+}
+
 async function getAllVotoType() {
   try {
     return await VotoType.findAll({ attributes: ['id', 'tipo'] });
@@ -42,6 +55,7 @@ async function updateVotoType({ id, tipo, where }) {
 module.exports = {
   createVotoType,
   getVotoTypeById,
+  getVotoTypeByType,
   getAllVotoType,
   updateVotoType,
 };
