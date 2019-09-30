@@ -1,7 +1,8 @@
 const {
   Reuniao,
   ReuniaoType,
-  Sequelize: { fn, col },
+  Votacao,
+  Sequelize: { Op },
 } = require('../models');
 
 const attributes = ['id', 'titulo', 'data', 'hora_inicio', 'hora_segunda_chamada'];
@@ -38,6 +39,10 @@ async function getReuniaoById(id) {
         {
           association: 'Ponto',
           attributes: ['id', 'ponto'],
+          include: {
+            attributes: ['descricao'],
+            association: 'Situacao',
+          },
         },
       ],
     });
@@ -88,7 +93,10 @@ async function getCurrentReuniao() {
           association: 'ReuniaoStatus',
           attributes: ['descricao'],
           where: {
-            descricao: 'Habilitada',
+            [Op.or]: [
+              { descricao: 'Habilitada' },
+              { descricao: 'Iniciada' },
+            ],
           },
           require: true,
         },
@@ -144,7 +152,7 @@ async function updateReuniaoStatus({
 
 async function deleteReuniaoById(id) {
   try {
-    return await Reuniao.destroy({ reuniao_id: id });
+    return await Reuniao.destroy({ where: { id } });
   } catch (e) {
     throw e;
   }

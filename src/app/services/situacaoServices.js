@@ -16,6 +16,14 @@ async function getSituacaoById(id) {
   }
 }
 
+async function getSituacaoByDescricao(descricao) {
+  try {
+    return Situacao.findOne({ where: { descricao } });
+  } catch (e) {
+    throw e;
+  }
+}
+
 async function getAllSituacao() {
   try {
     return await Situacao.findAll({ attributes: ['id', 'descricao'] });
@@ -40,6 +48,7 @@ async function updateSituacao({ id, descricao, where }) {
 module.exports = {
   createSituacao,
   getSituacaoById,
+  getSituacaoByDescricao,
   getAllSituacao,
   updateSituacao,
 };

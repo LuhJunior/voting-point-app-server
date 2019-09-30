@@ -4,6 +4,7 @@ const {
   getAllVotacao,
   getAllVotacaoByUserId,
   getAllVotacaoByPontoId,
+  getAllVotacaoByReuniaoId,
   updateVotacao,
 } = require('../services/votacaoServices');
 const { getVotoTypeByType } = require('../services/votoTypeServices');
@@ -56,6 +57,15 @@ async function findAllVotacaoByPontoId(req, res, next) {
   }
 }
 
+async function findAllVotacaoByReuniaoId(req, res, next) {
+  try {
+    const data = await getAllVotacaoByReuniaoId(req.params.id);
+    return res.status(200).send({ ok: true, data });
+  } catch (e) {
+    return next(e);
+  }
+}
+
 async function alterVotacaoByUserIdPontoId(req, res, next) {
   try {
     const { UserId, PontoId } = req.params;
@@ -81,6 +91,7 @@ module.exports = {
   findAllVotacao,
   findAllVotacaoByUserId,
   findAllVotacaoByPontoId,
+  findAllVotacaoByReuniaoId,
   alterVotacaoByUserIdPontoId,
   alterVotacao,
 };

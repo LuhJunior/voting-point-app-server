@@ -99,9 +99,9 @@ function handleStartVote(socket, secretaryId) {
 
 function handleVotationResult(socket, secretaryId) {
   if (room && room.leader.secretaryId === secretaryId) {
+    room.changeEtapa('votation_result');
     socket.broadcast.emit('votation_result');
     socket.emit('votation_result');
-    room.changeEtapa('votation_result');
   }
 }
 

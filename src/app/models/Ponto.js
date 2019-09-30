@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   Ponto.associate = (models) => {
     models.Ponto.belongsTo(models.Reuniao);
     models.Ponto.belongsTo(models.Situacao);
-    models.Ponto.belongsToMany(models.User, { through: models.Votacao });
+    models.Ponto.belongsToMany(models.User, { as: 'Votos', through: models.Votacao });
   };
 
   return Ponto;

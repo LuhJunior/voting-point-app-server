@@ -116,6 +116,32 @@ async function getAllVotacaoByPontoId(PontoId) {
   }
 }
 
+async function getAllVotacaoByReuniaoId(ReuniaoId) {
+  try {
+    return await Votacao.findAll({
+      attributes: ['secreto'],
+      include: [
+        {
+          model: User,
+          attributes: ['nome', 'matricula'],
+        },
+        {
+          model: Ponto,
+          attributes: ['ponto'],
+          where: { ReuniaoId },
+          required: true,
+        },
+        {
+          association: 'VotoType',
+          attributes: ['tipo'],
+        },
+      ],
+    });
+  } catch (e) {
+    throw e;
+  }
+}
+
 async function updateVotacao({
   UserId, PontoId, secreto, where,
 }) {
@@ -141,5 +167,6 @@ module.exports = {
   getAllVotacao,
   getAllVotacaoByUserId,
   getAllVotacaoByPontoId,
+  getAllVotacaoByReuniaoId,
   updateVotacao,
 };
